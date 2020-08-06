@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input class="form-control" type="text" id = "generateNumberField">
+                    <button class="generate-btn" onclick="generateNumber()">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input class="form-control" type="text" id="numberPadField">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button" onclick = "numberButton(7)">7</div>
+                              <div class="button" onclick = "numberButton(8)">8</div>
+                              <div class="button" onclick = "numberButton(9)">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick = "numberButton(4)">4</div>
+                              <div class="button" onclick = "numberButton(5)">5</div>
+                              <div class="button" onclick = "numberButton(6)">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick = "numberButton(1)">1</div>
+                              <div class="button" onclick = "numberButton(2)">2</div>
+                              <div class="button" onclick = "numberButton(3)">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button" onclick = "deleteButton()"><</div>
+                                <div class="button" onclick = "numberButton(0)">0</div>
+                                <div class="button" onclick = "clearButton()">C</div>
+                            </div>
+                            <div>
+                                <button type="submit" class="submit-btn" onclick="submitButton()">Submit</button>
+                                <p class="action-left"><span id="try-left">3 </span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+
+    <script>
+
+        function getId(id){
+            return document.getElementById(id);
+        }
+
+                // javascript code for generate Random Number
+
+        function generateNumber(){
+            const random = (Math.random()*9000) + 1000;
+            const randomNumber = parseInt(random);
+
+            const generateField = getId("generateNumberField");
+            generateField.value = randomNumber;
+        }
+
+                // javascript code for number Button
+
+        function numberButton(digit){
+            const numberPadField = getId("numberPadField");
+            const currentNumberPadField = numberPadField.value + digit;
+            numberPadField.value = currentNumberPadField;
+
+        }
+
+                // javascript code for clear Button
+
+        function clearButton(){
+            const numberPadField = getId("numberPadField");
+            numberPadField.value = "";
+        }
+
+                // javascript code for delete button
+
+        function deleteButton(){
+            const numberPadField = getId("numberPadField");
+            const currentNumberPadField = numberPadField.value;
+
+            const lengthOfNumber = currentNumberPadField.length;
+            const newNumberPadField = currentNumberPadField.slice(0, lengthOfNumber - 1);
+
+            numberPadField.value = newNumberPadField;
+        }
+
+                // javascript code for submit button
+
+        function notification(index, displayValue){
+            const notify = document.getElementsByClassName("notify")[index];
+            notify.style.display = displayValue;
+        }
+
+        function buttonDisabled(message){
+            const submitBtn = document.getElementsByClassName("submit-btn")[0];
+                submitBtn.disabled = true;
+                submitBtn.innerText = message;
+
+        }
+
+        function submitButton(){
+            const numberPadField = getId("numberPadField").value;
+            const generateField = getId("generateNumberField").value;
+            
+
+            if (numberPadField == generateField) {
+                notification(1, "block");
+
+                const numberPadField = getId("numberPadField");
+                numberPadField.value = "";
+
+                buttonDisabled("Congratulation");
+
+                notification(0, "none");
+            } 
+            else {
+                notification(0, "block");
+
+                const numberPadField = getId("numberPadField");
+                numberPadField.value = "";
+
+                const tryLeft = getId("try-left");
+                const currentTryLeft = parseInt(tryLeft.innerText);
+                const newTryLeft = currentTryLeft - 1;
+                tryLeft.innerText = newTryLeft;
+
+                if (newTryLeft == 0) {
+                    buttonDisabled("Sorry, No Access."); 
+                }
+            }
+        }
+
+    </script>
+</body>
+</html>

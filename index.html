@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="generate-btn-display" class="form-control" type="text">
+                    <button id="generate-btn" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="button-display" class="form-control" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div onclick="buttonPad(7)"class="button">7</div>
+                              <div onclick="buttonPad(8)"class="button">8</div>
+                              <div onclick="buttonPad(9)"class="button">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="buttonPad(4)" class="button">4</div>
+                              <div onclick="buttonPad(5)" class="button">5</div>
+                              <div onclick="buttonPad(6)" class="button">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div onclick="buttonPad(1)" class="button">1</div>
+                              <div onclick="buttonPad(2)" class="button">2</div>
+                              <div onclick="buttonPad(3)" class="button">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div onclick="eraseButton()" class="button"><</div>
+                                <div onclick="buttonPad(0)" class="button">0</div>
+                                <div onclick="clearButton()" class="button">C</div>
+                            </div>
+                            <div>
+                                <button onclick="submitButton()" id="submit-btn" type="submit" class="submit-btn">Submit</button>
+                                <p class="action-left"><span id="attempt">3</span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="lost-notify" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="success-notify" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+    <script>
+        //step-1
+        function pinGenerator(){
+            var pin = Math.round(Math.random()*(9999-1000)+1000);
+            return pin;
+        }
+        
+        document.getElementById("generate-btn").addEventListener("click",function(){
+            var randomPin = pinGenerator();
+            document.getElementById("generate-btn-display").value = randomPin;
+        })
+        //step-2
+        function buttonPad(num){
+            var buttonNumber = document.getElementById("button-display").value+num;
+            document.getElementById("button-display").value = buttonNumber;
+        }
+        function eraseButton(){
+            var displayValue = document.getElementById("button-display").value;
+            var newValue = displayValue.slice(0,(displayValue.length-1));
+            document.getElementById("button-display").value =newValue;
+            
+        }
+        function clearButton(){
+            document.getElementById("button-display").value =""
+        }
+
+        //part-3
+        function submitButton(){
+            var GeneratedPin = document.getElementById("generate-btn-display").value ;
+            var yourPin = document.getElementById("button-display").value;
+            
+               var successNotify= document.getElementById("success-notify");
+               var lostNotify =document.getElementById("lost-notify");
+               if(GeneratedPin==yourPin){
+               successNotify.style.display ="block";
+               }
+               else{
+                   lostNotify.style.display="block"
+                  var value= document.getElementById("attempt").innerText;
+                  value--;
+                  document.getElementById("attempt").innerText=value;
+                  if(value==0){
+                    document.getElementById("submit-btn").disabled = true;
+                    document.getElementById("submit-btn").innerText="sorry! try again"
+
+                  }
+
+               }
+            
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
